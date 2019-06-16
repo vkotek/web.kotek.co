@@ -4,8 +4,9 @@ import hashlib
 import random
 from datetime import datetime
 import requests
+import settings
 
-subscribers_file = 'subscribers.json'
+subscribers_file = settings.SUBSCRIBERS
 
 class User(object):
 
@@ -34,7 +35,8 @@ class User(object):
             'token': hashlib.sha224((salt + email).encode('UTF-8')).hexdigest(),
             'verified': False,
             'registered': datetime.now().isoformat(),
-            'preferences': ["1","2","3","4","5"], # This should be filled with IDs from Restaurants() class.
+            'preferences': ["1","2","3","4","5"],
+            # This should be auto filled with IDs from Restaurants() class.
             'salt': salt,
         }
 
@@ -71,9 +73,9 @@ class User(object):
     def email_verification(self, uuid):
         user = self.get(uuid=uuid)
         return requests.post(
-            "https://api.mailgun.net/v3/kotek.co/messages",
-            auth=("api", "key-0500f40586ec016cbd2c131ea2222ae2"),
-            data={"from": "KOTEK.CO <vojtech@kotek.co>",
+            settings.MAILGUN_URL,
+            auth=("api", settings.MAILGUN_API_KEY),
+            data={"from": settings.MAILGUN_FROM,
                 "to": user['email'],
                 "subject": "Verify your email",
                 "template": "email_verification",
