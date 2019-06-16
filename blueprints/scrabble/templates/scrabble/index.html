@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% set active_page = "scrabble" %}
+{% block body %}
+<div id="page" class="container" style="background-color: white;">
+	<div class="title">
+		<h2>Scrabble</h2>
+		<span class="byline">Word finder. <a href="{{ url_for('scrabble.history') }}">Game data.</a></span>
+	</div>
+  <form action="" method="post">
+      <p>Letters: <input type="text" name="letters"></p>
+      <p>Length: <input type="number" name="length" value="8"></p>
+      <p><input type="submit" value="Find"></p>
+  </form>
+  {% if data %}
+  <div class="row">
+   <div class="col-sm-4">
+   <h2>Highest Points</h2>
+	<ul>
+	  {% for item in data[0][:20] %}
+		<li>{{ item[0] }}: {{ item[1] }}</li>
+	  {% endfor %}
+	</ul>
+   </div>
+   <div class="col-sm-4">
+   <h2>Shortest</h2>
+	<ul>
+	  {% for item in data[1][:20] %}
+		<li>{{ item[0] }}: {{ item[1] }}</li>
+	  {% endfor %}
+	</ul>
+   </div>
+   <div class="col-sm-4">
+   <h2>Suggested</h2>
+	<ul>
+	  {% for item in data[2][:20] %}
+		<li>{{ item[0] }}: {{ item[1] }}</li>
+	  {% endfor %}
+	</ul>
+   </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

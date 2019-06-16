@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+{% set active_page = "scrabble" %}
+{% block body %}
+<script type="text/javascript">
+	function reCalc(){
+			var vo = document.getElementsByName('vojta');
+			var vl = document.getElementsByName('vlada');
+			var voTotal=0;
+			var vlTotal=0;
+			for(var i=0;i<vo.length;i++){
+					if(parseInt(vo[i].value))
+							voTotal += parseInt(vo[i].value);
+			}
+			for(var i=0;i<vl.length;i++){
+					if(parseInt(vl[i].value))
+							vlTotal += parseInt(vl[i].value);
+			}
+			document.getElementById('voTotal').value = voTotal;
+			document.getElementById('vlTotal').value = vlTotal;
+	}
+
+</script>
+<div id="page" class="container" style="background-color: white;">
+	<div class="title">
+		<h2>Scrabble</h2>
+		<span class="byline">Add new game..</span>
+	</div>
+	<div class="row" id="scrabble-insert">
+		<div class="col-sm-6 offset-sm-3">
+		  <form action="" method="post">
+			  <p>Game #: <input type="number" name="game_id" value="{{ data['game_id'] }}" style="width: 3em;">
+			  Date: <input type="text" name="game_date" value="{{ data['date'] }}"></p>
+				<table class="table" id="scrabble-insert-table">
+					<thead>
+						<td>Turn</td>
+						<td>Vojta</td>
+						<td>Vlada</td>
+					</thead>
+					{% for i in range(1,26) %}
+					<tr>
+						<td>{{ i }}</td>
+						<td><input onblur="reCalc()" type="number" name="vojta" id="vo_{{i}}" value=""></td>
+						<td><input onblur="reCalc()" type="number" name="vlada" id="vl_{{i}}" value=""></td>
+					</tr>
+					{% endfor %}
+					<tr class="table-final" style="border-top: 1px solid black;">
+						<td><b>Total:</b></td>
+						<td><input type="number" name="total" id="voTotal" disabled></td>
+						<td><input type="number" name="total" id="vlTotal" disabled></td>
+					</tr>
+				</table>
+				<hr>
+			  <p><input type="submit" value="Insert"></p>
+			</form>
+		</div>
+	</div class="row">
+</div>
+{% endblock %}

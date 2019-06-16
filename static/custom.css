@@ -1,0 +1,45 @@
+thead {
+  font-weight: bold;
+  border-bottom: solid 2px gray;
+}
+.tlastrow {
+  font-weight: bold;
+  border-top: solid 2px gray;
+}
+
+
+.winner {
+  font-weight: bold;
+  background-color: #92d492;
+}
+.max {
+  border: 2px solid green !important;
+}
+.min {
+  border: 2px solid red !important;
+}
+.max-personal {
+  background-color: green;
+  color: white;
+}
+.min-personal {
+  background-color: red;
+  color: white;
+}
+
+#scrabble-insert input {
+  text-align: right;
+  border: none;
+}
+
+#scrabble-insert-table input {
+  width: 100%;
+}
+
+#scrabble-insert-table {
+  width: 100%;
+}
+
+.flashes li {
+  text-align: center;
+}

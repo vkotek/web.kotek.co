@@ -1,0 +1,110 @@
+{% extends "layout.html" %}
+{% set active_page = "scrabble" %}
+{% block body %}
+<div id="page" class="container" style="background-color: white;">
+	<div class="title">
+		<h2>Scrabble</h2>
+		<span class="byline">Game statistics of Vlada and myself. <a href="{{ url_for('scrabble.update') }}">Update graphs.</a></span>
+	</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<h4>Scores History</h4>
+			<span class="byline">Game Scores and average score per turn + running average for last 10 games.</span>
+			<iframe width="970px" height="550px" style="border: none;" src="{{ url_for('static', filename='media/scrabble.html') }}?t={{ data['timestamp'] }}">
+				Loading..
+			</iframe>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-12">
+			<h4>Plays Histogram</h4>
+			<span class="byline">Distribution of scores of words played.</span>
+			<img style="text-align: center;" src="{{ url_for('static', filename='media/histogram.png') }}?t={{ data['timestamp'] }}">
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-8 col-sm-offset-2">
+			{% if data['games'] %}
+				<table class="table table-striped">
+				<thead>
+					<td><a href="{{ url_for('scrabble.history') }}">Game</a></td>
+					<td>Date</td><td>Turns</td><td>Vojta</td><td>Vlada</td><td>∆</td>
+				</thead>
+				{% for item in data['games']['data'] %}
+					<tr>
+						<td><a href="{{ url_for('scrabble.history', game=item[0]) }}"><b>{{ item[0] }}</b></a></td>
+						<td>{{ item[1] }}</td>
+						<td>{{ item[2] }}</td>
+						<td class="
+						{% if item[3] > item[4] %}winner{% endif %}
+						{% if item[3] == data['games']['stats']['max'] %}max{% endif %}
+						{% if item[3] == data['games']['stats']['max_game_vojta'] %}max-personal{% endif %}
+						{% if item[3] == data['games']['stats']['min_game_vojta'] %}min-personal{% endif %}
+						">{{ item[3] }}</td>
+						<td class="
+						{% if item[3] < item[4] %}winner{% endif %}
+						{% if item[4] == data['games']['stats']['max'] %}max{% endif %}
+						{% if item[4] == data['games']['stats']['max_game_vlada'] %}max-personal{% endif %}
+						{% if item[4] == data['games']['stats']['min_game_vlada'] %}min-personal{% endif %}
+						">{{ item[4] }}</td>
+						<td>{{ item[3] - item[4] }}</td>
+					</tr>
+				{% endfor %}
+				<tr class="tlastrow">
+					<td><a href="{{ url_for('scrabble.insert') }}">Add..</a></td>
+					<td></td><td></td>
+					<td>{{ data['games']['stats']['sum_vojta'] }}</td>
+					<td>{{ data['games']['stats']['sum_vlada'] }}</td>
+					<td>{{ data['games']['stats']['sum_vojta'] - data['games']['stats']['sum_vlada'] }}</td>
+				</tr>
+			</table>
+			{% endif %}
+		</div>
+		<div class="col-sm-4">
+			{% if data['game'] %}
+				<table class="table table-striped">
+				<thead>
+					<td>Turn</td><td>Vojta</td><td>Vlada</td>
+				</thead>
+					{% for turn in data['game'] %}
+					<tr>
+						<td>{{ turn[0] }}</td><td>{{ turn[1] }}</td><td>{{ turn[2] }}</td>
+					</tr>
+					{% endfor %}
+				</table>
+			{% else %}
+				<table class="table">
+					<thead>
+						<td></td><td>Vojta</td><td>Vlada</td>
+					</thead>
+					<tr>
+						<td>Max Game</td>
+						<td>{{ data['games']['stats']['max_game_vojta'] }}</td>
+						<td>{{ data['games']['stats']['max_game_vlada'] }}</td>
+					</tr>
+					<tr>
+						<td>Min Game</td>
+						<td>{{ data['games']['stats']['min_game_vojta'] }}</td>
+						<td>{{ data['games']['stats']['min_game_vlada'] }}</td>
+					</tr>
+					<tr>
+						<td>Avg Game</td>
+						<td>{{ data['games']['stats']['avg_game_vojta'] }}</td>
+						<td>{{ data['games']['stats']['avg_game_vlada'] }}</td>
+					</tr>
+					<tr>
+						<td>Max Turn</td>
+						<td>{{ data['games']['stats']['max_turn_vojta'] }}</td>
+						<td>{{ data['games']['stats']['max_turn_vlada'] }}</td>
+					</tr>
+					<tr>
+						<td>Wins ({{ data['games']['stats']['wins_tied'] }} ties)</td>
+						<td>{{ data['games']['stats']['wins_vojta'] }}</td>
+						<td>{{ data['games']['stats']['wins_vlada'] }}</td>
+					</tr>
+				</table>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endblock %}

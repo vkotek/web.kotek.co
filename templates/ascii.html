@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+{% set active_page = "index" %}
+{% block body %}
+<div id="page" class="container">
+  <div class="title">
+		<h2>ASCII</h2>
+		<span class="byline">Convert images to symbols.</span>
+	</div>
+    <div>
+        <form>
+            Image URL: <input type="text" value="http://...">
+            <br>
+            Color:
+            <input type="radio" value="1" name="color" checked> Yes
+            <input type="radio" value="0" name="color"> No
+            <br>
+            Ratio:
+            <input type="number" name="ratio" value="1.0">
+            <br>
+            Size:
+            <input type="number" name="size" value="100">
+            <br>
+            <input type="submit" value="Go">
+        </form>
+	</div>
+    <div>
+        <p style="font-size:8px; font-weight: bold;">
+            {{ data['image'] }}
+        </p>
+	</div>
+</div>
+{% endblock %}

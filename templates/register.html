@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block body %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  $('#passwordTest').bind('input', function() {
+  	if ( $("#password").val() != $("#passwordTest").val()) {
+  		$("#passwordMismatch").show();
+    } else {
+  		$("#passwordMismatch").hide();
+    };
+	});
+});
+</script>
+<div id="page" class="container" style="background-color: white;">
+	<div class="title">
+		<h2>Register</h2>
+		<span class="byline">Register new user</span>
+	</div>
+  <form action="" method="post" style="max-width: 300px; margin-left: auto; margin-right: auto;">
+      <p>Username: <input type="text" name="username"></p>
+      <p>Password: <input id="password" type="password" name="password"></p>
+			<p id="passwordMismatch" style="display:none;background-color:red;color:white;font-weight:bold;">Passwords do not match!</p>
+      <p>Repeated: <input id="passwordTest" type="password" name="passwordTest"></p>
+      <p><input type="submit" value="Register"></p>
+  </form>
+</div>
+{% endblock %}

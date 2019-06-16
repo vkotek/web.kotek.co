@@ -1,0 +1,120 @@
+{% extends "layout.html" %}
+{% set active_page = "home" %}
+{% block body %}
+<script type="text/javascript">
+window.onload = function () {
+	var chartDaily = new CanvasJS.Chart("chartContainerDaily", {
+		title:{
+			text: "Daily Average Temperature & Humidity",
+			fontFamily: "Arial,sans-serif",
+            fontSize: 24
+		},
+        legend: {
+            horizontalAlign: "left", // "center" , "right"
+            verticalAlign: "top",  // "top" , "bottom"
+            fontSize: 15
+        },
+		axisX:{
+				valueFormatString: "DD-MMM" ,
+				labelAngle: -50
+		},
+		axisY:[{
+				valueFormatString: "##°C" ,
+				maximum: 30,
+				minimum: 10 
+		},{
+				valueFormatString: "##'%'" ,
+				maximum: 80,
+				minimum: 20 
+        }],
+		data: [
+		{
+			// Change type to "doughnut", "line", "splineArea", etc.
+			type: "line",
+            showInLegend: true,
+            legendText: "Temperature",
+            axisYIndex: 0,
+			dataPoints: [
+				{% for row in data['climate']['daily'] %}
+					{ x: new Date({{ row[0] }}), y: {{ row[1] }} },
+				{% endfor %}
+			]
+		},
+		{
+			// Change type to "doughnut", "line", "splineArea", etc.
+			type: "line",
+            showInLegend: true,
+            legendText: "Humidity",
+            axisYIndex: 1,
+			dataPoints: [
+				{% for row in data['climate']['daily'] %}
+					{ x: new Date({{ row[0] }}), y: {{ row[2] }} },
+				{% endfor %}
+			]
+		},
+		]
+	});
+	var chartHourly = new CanvasJS.Chart("chartContainerHourly", {
+		title:{
+			text: "Daily Average Temperature & Humidity",
+			fontFamily: "Arial,sans-serif",
+            fontSize: 24
+		},
+        legend: {
+            horizontalAlign: "left", // "center" , "right"
+            verticalAlign: "top",  // "top" , "bottom"
+            fontSize: 15
+        },
+		axisX:{
+				valueFormatString: "DD-MMM" ,
+				labelAngle: -50
+		},
+		axisY:[{
+				valueFormatString: "##°C" ,
+				maximum: 30,
+				minimum: 10 
+		},{
+				valueFormatString: "##'%'" ,
+				maximum: 80,
+				minimum: 20 
+        }],
+		data: [
+		{
+			// Change type to "doughnut", "line", "splineArea", etc.
+			type: "line",
+            showInLegend: true,
+            legendText: "Temperature",
+            axisYIndex: 0,
+			dataPoints: [
+				{% for row in data['climate']['hourly'] %}
+					{ x: new Date({{ row[0] }}), y: {{ row[1] }} },
+				{% endfor %}
+			]
+		},
+		{
+			// Change type to "doughnut", "line", "splineArea", etc.
+			type: "line",
+            showInLegend: true,
+            legendText: "Humidity",
+            axisYIndex: 1,
+			dataPoints: [
+				{% for row in data['climate']['hourly'] %}
+					{ x: new Date({{ row[0] }}), y: {{ row[2] }} },
+				{% endfor %}
+			]
+		},
+		]
+	});
+	chartDaily.render();
+	chartHourly.render();
+}
+</script>
+<div id="page" class="container">
+	<div class="title">
+		<h2>Home Dashboard</h2>
+		<span class="byline">This dashboard is a work in progress.</span>
+	</div>
+	<div id="chartContainerDaily" style="height: 500px; width: 100%; padding: 1em;">CHART</div>
+	<div id="chartContainerHourly" style="height: 500px; width: 100%; padding: 1em;">{{ data['climate']['hourly'] }}</div>
+</div>
+{% endblock %}

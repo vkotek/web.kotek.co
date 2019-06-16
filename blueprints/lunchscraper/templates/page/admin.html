@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block body %}
+<div id="page" class="container" style="background-color: white;">
+	<div class="title">
+		<h2>Lunch Scraper - Admin</h2>
+	</div>
+	<h3>Restaurants</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Restaurant</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in data['restaurants'] %}
+      <tr>
+        <td>{{ r.id }}</td>
+        <td>{{ r.name }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+	<h3>{{ data.general.users_count }} Subscribers</h3>
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th>Email</th>
+        <th>Preferences</th>
+        <th>Registered</th>
+        <th>Verified</th>
+        <th>Edit</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for u in data['users'] %}
+      <tr>
+        <td>{{ u.email }}</td>
+        <td>{{ u.preferences }}</td>
+        <td>{{ u.registered }}</td>
+        <td>{{ u.verified }}</td>
+        <td><a href="/lunch-scraper/edit?token={{ u.token }}">EDIT</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

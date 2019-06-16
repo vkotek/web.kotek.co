@@ -1,0 +1,5 @@
+pin,value,name,nice_name,description
+1,0,door,"Door","Checks if door is opened or closed."
+2,0,ceiling_light,"Starlights","Ceiling LED light net."
+3,22,temperature,"Temperature","Temperature sensor."
+4,6,heater,"Heater","Heater level."
