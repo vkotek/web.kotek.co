@@ -1,32 +1,20 @@
-from flask import Flask, flash, render_template, request, session, redirect, url_for, g, Markup
+from flask import (
+    Flask,
+    flash,
+    render_template,
+    render_template_string,
+    request,
+    session,
+    redirect,
+    url_for,
+    g,
+    Markup)
 from functools import wraps
 import json
 import hashlib
 import csv
-import sqlite3
-import drawchart
-from time import sleep
-import datetime, time
-import pandas as pd
 
-# from plugins.scrabbler import scrabbler
-# from plugins import room_controls
-# from plugins import db
-
-################################################################################
-################################### FLASK SETUP ################################
-################################################################################
-
-# app = Flask(__name__)
-#
-# app.config.update(
-#     SECRET_KEY='h\x13\xa2\xa1\xd2\x83\x84.\xfe\xa8{$\x1f\x05\x16\x84s\xfb\x01u\x0f\xcf\xb8\xe6',
-#     DEBUG=False
-# )
-#
-# salt = "da74hg"
-
-
+from flask_menu import Menu, register_menu
 ################################################################################
 ################################# New Format ###################################
 ################################################################################
@@ -44,11 +32,7 @@ def create_app():
     from blueprints.api import api
 
     app = Flask(__name__, instance_relative_config=True)
-
-    app.config.update(
-        SECRET_KEY='h\x13\xa2\xa1\xd2\x83\x84.\xfe\xa8{$\x1f\x05\x16\x84s\xfb\x01u\x0f\xcf\xb8\xe6',
-        DEBUG=False
-    )
+    Menu(app=app)
 
     # app.config.from_object('config.settings')
     app.config.from_pyfile('settings.py', silent=True)
@@ -60,8 +44,23 @@ def create_app():
     app.register_blueprint(api)
 
     error_templates(app)
+    #
+    # def tmpl_show_menu():
+    #     return render_template_string(
+    #     """
+    #     {% for item in current_menu.children %}
+    #     {% if item.active %}*{% endif %}{{item.text}}
+    #     {% endfor %}
+    #     """
+    #     )
+    #
+    # @app.route('/menu')
+    # @register_menu(app, '.', 'Home')
+    # def menu():
+    #     return tmpl_show_menu()
 
-    return app.run(host='0.0.0.0', port=8888, debug=True)
+    return app
+    # return app.run(host='0.0.0.0', port=8888, debug=True)
 
 def error_templates(app):
     """
@@ -85,7 +84,7 @@ def error_templates(app):
         code = getattr(status, 'code', 500)
         return render_template('errors/{0}.html'.format(code)), code
 
-    for error in [404, 429, 500]:
+    for error in [404]:
         app.errorhandler(error)(render_status)
 
     return None
@@ -93,6 +92,21 @@ def error_templates(app):
 ################################################################################
 ########################## BASIC SITE FUNCTIONS AND PAGES ######################
 ################################################################################
+#
+# def tmpl_show_menu():
+#     return render_template_string(
+#     """
+#     {% for item in current_menu.children %}
+#     {% if item.active %}*{% endif %}{{item.text}}
+#     {% endfor %}
+#     """
+#     )
+#
+# @app.route('/menu')
+# @register_menu(app, '.', 'Home')
+# def menu():
+#     return tmpl_show_menu()
+
 #
 # def login_required(f):
 #     @wraps(f)

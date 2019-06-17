@@ -1,3 +1,5 @@
 prod_*
 settings.py
 venv
+subscribers.json
+*.pyc
