@@ -129,6 +129,13 @@ class User(object):
         for char in range(length):
             chars.append(random.choice(ALPHABET))
         return "".join(chars)
+    
+    def add_restaurant_to_preferences(self, restaurant_id):
+        self.reload()
+        for recipient in self.users:
+            recipient['preferences'].append(str(restaurant_id))
+        self.save()
+        return True
 
 class Restaurants(object):
 
@@ -139,6 +146,7 @@ class Restaurants(object):
             {'id': 3, 'name': 'Dave B, Five'},
             {'id': 4, 'name': 'Potrefena Husa - Na Verandach'},
             {'id': 5, 'name': 'Lavande Restaurant'},
+            {'id': 6, 'name': 'Prostor'},
             ]
 
     def restaurants(self):
