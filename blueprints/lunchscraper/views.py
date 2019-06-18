@@ -1,31 +1,21 @@
 from flask import (
     Blueprint,
+    redirect,
     render_template,
     request,
+    url_for,
     flash)
 
 from plugins import db
+from plugins.login_manager import login_required
 
 lunchScraper = Blueprint('lunchscraper', __name__, template_folder='templates', url_prefix='/lunch-scraper')
-
-# @lunchScraper.route("/admin")
-# def admin():
-#     return render_template('page/admin.html', data=None)
-    # users = db.User().users
-    #
-    # data = {}
-    #
-    # data['general'] = {'users_count': len(users)}
-    # data['restaurants'] = db.Restaurants().restaurants
-    # data['users'] = users
-    #
-    # return render_template('subscription-admin.html', data=data)
 
 @lunchScraper.route("/", methods=['GET','POST'])
 def index():
 
     if request.method == 'GET':
-        return render_template('subscription.html', user=None, hide_menu=True)
+        return render_template('page/index.html', user=None, hide_menu=True)
 
     elif request.method == 'POST':
 
@@ -36,7 +26,7 @@ def index():
         else:
             flash('Seems like this email is already subscribed!')
 
-        return redirect(url_for('index'))
+        return redirect(url_for('lunchscraper.index'))
 
 @lunchScraper.route("/edit", methods=['GET','POST'])
 def edit():
@@ -69,7 +59,7 @@ def edit():
             uuid = db.User().get(token=token)['uuid']
             db.User().remove(uuid)
             flash("Hi.. wait, who is this?")
-            return redirect(url_for('subscription_forgotten'))
+            return redirect(url_for('lunchscraper.forgotten'))
 
         new_preferences = [pref[0] for pref in data.getlist('preferences')]
         update = db.User().update_preferences(token, new_preferences)
@@ -77,7 +67,7 @@ def edit():
             flash("Your preferences have been updated.")
         else:
             flash("There was a problem updating your preferences.")
-        return redirect(url_for('edit', token=token))
+        return redirect(url_for('lunchscraper.edit', token=token))
 
 @lunchScraper.route("/verify", methods=['GET','POST'])
 def verify():
@@ -93,10 +83,10 @@ def verify():
         return render_template('page/verify.html', text=text, hide_menu=True)
     elif request.method == 'POST':
         # Verify token and mark user as verified.
-        return redirect( url_for('verify'))
+        return redirect( url_for('lunchscraper.verify'))
 
 @lunchScraper.route("/admin")
-# @login_required
+@login_required
 def admin():
 
     users = db.User().users

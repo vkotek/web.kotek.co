@@ -9,7 +9,6 @@ from flask import (
     url_for,
     g,
     Markup)
-from functools import wraps
 import json
 import hashlib
 import csv
@@ -30,34 +29,22 @@ def create_app():
     from blueprints.projects import projects
     from blueprints.scrabble import scrabble
     from blueprints.api import api
+    from blueprints.auth import auth
 
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__)
     Menu(app=app)
 
     # app.config.from_object('config.settings')
-    app.config.from_pyfile('settings.py', silent=True)
+    app.config.from_pyfile('settings.py', silent=False)
 
     # app.register_blueprint(page)
     app.register_blueprint(lunchScraper)
     app.register_blueprint(projects)
     app.register_blueprint(scrabble)
     app.register_blueprint(api)
+    app.register_blueprint(auth)
 
     error_templates(app)
-    #
-    # def tmpl_show_menu():
-    #     return render_template_string(
-    #     """
-    #     {% for item in current_menu.children %}
-    #     {% if item.active %}*{% endif %}{{item.text}}
-    #     {% endfor %}
-    #     """
-    #     )
-    #
-    # @app.route('/menu')
-    # @register_menu(app, '.', 'Home')
-    # def menu():
-    #     return tmpl_show_menu()
 
     return app
     # return app.run(host='0.0.0.0', port=8888, debug=True)
@@ -88,87 +75,6 @@ def error_templates(app):
         app.errorhandler(error)(render_status)
 
     return None
-
-################################################################################
-########################## BASIC SITE FUNCTIONS AND PAGES ######################
-################################################################################
-#
-# def tmpl_show_menu():
-#     return render_template_string(
-#     """
-#     {% for item in current_menu.children %}
-#     {% if item.active %}*{% endif %}{{item.text}}
-#     {% endfor %}
-#     """
-#     )
-#
-# @app.route('/menu')
-# @register_menu(app, '.', 'Home')
-# def menu():
-#     return tmpl_show_menu()
-
-#
-# def login_required(f):
-#     @wraps(f)
-#     def decorated_function(*args, **kwargs):
-#         if 'username' not in session:
-#             return redirect(url_for('login', next=request.url))
-#         return f(*args, **kwargs)
-#     return decorated_function
-#
-# @app.route("/")
-# @login_required
-# def index():
-#     data = ["Hello"]
-#     return render_template('index.html')
-#
-# @app.route("/login", methods=['GET','POST'])
-# def login():
-#     if request.method == 'POST':
-#         try:
-#             user = request.form['username']
-#             pw = salt + request.form['password']
-#             pw_hashed = hashlib.md5(pw.encode('utf8')).hexdigest()
-#             with open('users.csv') as users:
-#                 users = csv.reader(users, delimiter=',', quotechar='"')
-#                 for u in users:
-# #                    print(u, pw_hashed)
-#                     if user == u[0] and pw_hashed == u[1]:
-#                         flash('Log in successful')
-#                         session['username'] = request.form['username']
-#                         if request.args.get('next'):
-#                             return redirect(request.args.get('next'))
-#                         return redirect(url_for('index'))
-#         except:
-#             flash("Invalid username or password")
-#             return redirect(url_for('login'))
-#
-#     return render_template('login.html')
-#
-# @app.route("/register", methods=['GET','POST'])
-# @login_required
-# def register():
-#
-#     if request.method == 'POST':
-#         user = request.form['username']
-#         pw = salt + request.form['password']
-#         pw_hashed = hashlib.md5(pw.encode('utf8')).hexdigest()
-#         with open('users.csv', 'a') as users:
-#             users = csv.writer(users, delimiter=',', quotechar='"')
-#             users.writerow([user, pw_hashed])
-#         flash('User created.')
-#         return redirect(url_for('index'))
-#
-#     elif request.method == 'GET':
-#         return render_template('register.html')
-#
-#     return render_template('login.html')
-#
-# @app.route("/logout")
-# @login_required
-# def logout():
-#     session.pop('username', None)
-#     return redirect(url_for('login'))
 
 ################################################################################
 ########################### HOME AUTOMATION API ################################
@@ -268,5 +174,5 @@ def error_templates(app):
 ################################################################################
 
 if __name__ == "__main__":
-    create_app()
-    # app.run(host='0.0.0.0', port=8888, debug=True)
+    app = create_app()
+    app.run(host='0.0.0.0', port=8888, debug=True)
