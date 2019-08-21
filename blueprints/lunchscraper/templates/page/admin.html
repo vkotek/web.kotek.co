@@ -37,8 +37,8 @@
       <tr>
         <td>{{ u.email }}</td>
         <td>{{ u.preferences }}</td>
-        <td>{{ u.registered }}</td>
-        <td>{{ u.verified }}</td>
+        <td>{{ pretty_datetime(u.registered) }}</td>
+        <td>{{ pretty_datetime(u.verified) }}</td>
         <td><a href="/lunch-scraper/edit?token={{ u.token }}">EDIT</a></td>
       </tr>
       {% endfor %}

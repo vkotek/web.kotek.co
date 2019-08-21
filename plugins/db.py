@@ -35,7 +35,7 @@ class User(object):
             'token': hashlib.sha224((salt + email).encode('UTF-8')).hexdigest(),
             'verified': False,
             'registered': datetime.now().isoformat(),
-            'preferences': ["1","2","3","4","5"],
+            'preferences': ["1","2","3","4","5","6"],
             # This should be auto filled with IDs from Restaurants() class.
             'salt': salt,
         }
@@ -147,6 +147,7 @@ class Restaurants(object):
             {'id': 4, 'name': 'Potrefena Husa - Na Verandach'},
             {'id': 5, 'name': 'Lavande Restaurant'},
             {'id': 6, 'name': 'Prostor'},
+            {'id': 7, 'name': 'Gourmet Pauza'},
             ]
 
     def restaurants(self):

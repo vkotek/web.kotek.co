@@ -9,9 +9,11 @@ from flask import (
 )
 
 from plugins.login_manager import login_required
+from settings import SALT as salt
+
+import hashlib, csv
 
 auth = Blueprint('auth', __name__, template_folder='templates', url_prefix='/auth')
-
 
 @auth.route("/")
 @login_required
@@ -29,7 +31,6 @@ def login():
             with open('users.csv') as users:
                 users = csv.reader(users, delimiter=',', quotechar='"')
                 for u in users:
-#                    print(u, pw_hashed)
                     if user == u[0] and pw_hashed == u[1]:
                         flash('Log in successful')
                         session['username'] = request.form['username']

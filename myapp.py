@@ -30,6 +30,7 @@ def create_app():
     from blueprints.scrabble import scrabble
     from blueprints.api import api
     from blueprints.auth import auth
+    from blueprints.page import page
 
     app = Flask(__name__)
     Menu(app=app)
@@ -43,11 +44,12 @@ def create_app():
     app.register_blueprint(scrabble)
     app.register_blueprint(api)
     app.register_blueprint(auth)
+    app.register_blueprint(page)
 
     error_templates(app)
 
     return app
-    # return app.run(host='0.0.0.0', port=8888, debug=True)
+
 
 def error_templates(app):
     """
@@ -145,34 +147,6 @@ def error_templates(app):
 #
 #     return redirect(url_for('home'))
 
-################################################################################
-##############################  CRYPTO TRADER ##################################
-################################################################################
-
-# @app.route("/trader")
-# @login_required
-# def trader():
-#     f = "/home/vojtech/scripts/botfinex/info.log"
-#     try:
-#         with open(f, 'r') as f:
-#             data = f.readlines()
-#             data = data[-50:]
-#     except:
-#         data = "Cannot get latest trading data."
-#     return render_template('trader.html', data=data)
-#
-# @app.route("/trader/refresh")
-# @login_required
-# def trader_refresh():
-#     drawchart.drawchart()
-#     sleep(2)
-#     return redirect(url_for('trader'))
-
-
-################################################################################
-##################################### END ######################################
-################################################################################
-
 if __name__ == "__main__":
     app = create_app()
-    app.run(host='0.0.0.0', port=8888, debug=True)
+    app.run(host='0.0.0.0', port=9998, debug=True)
