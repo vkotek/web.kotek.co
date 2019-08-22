@@ -35,7 +35,8 @@ class User(object):
             'token': hashlib.sha224((salt + email).encode('UTF-8')).hexdigest(),
             'verified': False,
             'registered': datetime.now().isoformat(),
-            'preferences': ["1","2","3","4","5","6"],
+#            'preferences': ["1","2","3","4","5","6","7"],
+            'preferences': Restaurants().preferences(),
             # This should be auto filled with IDs from Restaurants() class.
             'salt': salt,
         }
@@ -152,3 +153,15 @@ class Restaurants(object):
 
     def restaurants(self):
         return self.restaurants
+
+    def get(self, id=None):
+        if isinstance(id, int):
+            for restaurant in self.restaurants:
+                if restaurant['id'] == id:
+                    return restaurant
+            return self.restaurants
+        return self.restaurants
+    
+    def preferences(self):
+        # Returns all preferences as a list
+        return [ str(x['id']) for x in self.restaurants ]
