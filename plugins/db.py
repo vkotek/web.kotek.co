@@ -23,6 +23,9 @@ class User(object):
         self.__init__()
 
     def add(self, email):
+        
+        email = email.lower()
+        
         self.reload()
         if self.exists(email=email):
             return False
@@ -35,9 +38,7 @@ class User(object):
             'token': hashlib.sha224((salt + email).encode('UTF-8')).hexdigest(),
             'verified': False,
             'registered': datetime.now().isoformat(),
-#            'preferences': ["1","2","3","4","5","6","7"],
             'preferences': Restaurants().preferences(),
-            # This should be auto filled with IDs from Restaurants() class.
             'salt': salt,
         }
 
@@ -111,10 +112,14 @@ class User(object):
 
     def exists(self, email=None, uuid=None):
         """Check whether the given user exists."""
+        
         self.reload()
-        for user in self.users:
-            if user['email'] == email or user['uuid'] == uuid:
-                return True
+        
+        if email != None and user['email'].lower() == email.lower():
+            return True
+        elif uuid != None and user['uuid'] == uuid:
+            return True
+        
         return False
 
     def clear(self):
@@ -142,13 +147,14 @@ class Restaurants(object):
 
     def __init__(self):
         self.restaurants = [
-            {"id": 1, 'name': 'Pastva'},
-            {'id': 2, 'name': 'Sodexo, Riverview'},
-            {'id': 3, 'name': 'Dave B, Five'},
-            {'id': 4, 'name': 'Potrefena Husa - Na Verandach'},
-            {'id': 5, 'name': 'Lavande Restaurant'},
-            {'id': 6, 'name': 'Prostor'},
-            {'id': 7, 'name': 'Gourmet Pauza'},
+                {"id": 1, 'name': 'Pastva'},
+                {'id': 2, 'name': 'Sodexo, Riverview'},
+                {'id': 3, 'name': 'Dave B, Five'},
+                {'id': 4, 'name': 'Potrefena Husa - Na Verandach'},
+                {'id': 5, 'name': 'Lavande Restaurant'},
+                {'id': 6, 'name': 'Prostor'},
+                {'id': 7, 'name': 'Gourmet Pauza'},
+                {'id': 8, 'name': 'Erpet Golf Centrum'}
             ]
 
     def restaurants(self):
