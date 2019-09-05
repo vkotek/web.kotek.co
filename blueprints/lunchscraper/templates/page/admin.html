@@ -4,12 +4,47 @@
 	<div class="title">
 		<h2>Lunch Scraper - Admin</h2>
 	</div>
+  {% if data['notices'] %}
+	<h3>Notices</h3>
+  <table class="table table-sm table-responsive">
+    <thead>
+      <tr>
+        <th style="width: 130px">Date</th>
+        <th>Message</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for r in data['notices'] %}
+      <tr>
+        <td>{{ r.date }}</td>
+          <td>
+              <b>{{ r.title }}</b>
+              <p>{{ r.text }}</p>
+          </td>
+      </tr>
+      {% endfor %}
+      <tr style="display: none;">
+        <td>
+            <form>
+            <input class="form-control" type="text" placeholder="YYYY-MM-DD" style="width: 100%;"></input>
+        </td>
+        <td>
+            <b><input class="form-control" type="text" placeholder="Title" style="width: 100%;"></input></b>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        <button type="submit">Save</button>
+      </form>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+{% endif %}
 	<h3>Restaurants</h3>
-  <table class="table">
+  <table class="table table-sm">
     <thead>
       <tr>
         <th>#</th>
         <th>Restaurant</th>
+        <th>Link</th>
       </tr>
     </thead>
     <tbody>
@@ -17,6 +52,7 @@
       <tr>
         <td>{{ r.id }}</td>
         <td>{{ r.name }}</td>
+        <td>{{ r.url }}</td>
       </tr>
       {% endfor %}
     </tbody>

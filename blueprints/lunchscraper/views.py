@@ -8,6 +8,7 @@ from flask import (
 
 from plugins import db
 from plugins.login_manager import login_required
+from blueprints.lunchscraper import controller
 
 lunchScraper = Blueprint('lunchscraper', __name__, template_folder='templates', url_prefix='/lunch-scraper')
 
@@ -43,6 +44,7 @@ def edit():
             for restaurant in data['restaurants']:
                 if str(restaurant['id']) in data['user']['preferences']:
                     restaurant['checked'] = 'checked'
+            data['language'] = user['language']
         else:
             data = None
 
@@ -62,7 +64,17 @@ def edit():
             return redirect(url_for('lunchscraper.forgotten'))
 
         new_preferences = [pref[0] for pref in data.getlist('preferences')]
-        update = db.User().update_preferences(token, new_preferences)
+
+
+        user = db.User()
+        # Update preferences
+        update_preferences = user.update_preferences(token, new_preferences)
+        # Update language
+        uuid = user.get(token=token)['uuid']
+        update_language = user.update(uuid, 'language', data['language'])
+
+        update = update_preferences and update_preferences
+
         if update:
             flash("Your preferences have been updated.")
         else:
@@ -96,6 +108,7 @@ def admin():
     data['general'] = {'users_count': len(users)}
     data['restaurants'] = db.Restaurants().restaurants
     data['users'] = users
+    data['notices'] = controller.Email.get_notices()
 
     return render_template('page/admin.html', data=data)
 

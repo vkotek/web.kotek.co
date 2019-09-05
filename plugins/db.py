@@ -115,11 +115,11 @@ class User(object):
         
         self.reload()
         
-        if email != None and user['email'].lower() == email.lower():
-            return True
-        elif uuid != None and user['uuid'] == uuid:
-            return True
-        
+        for user in self.users:
+            if email != None and user['email'].lower() == email.lower():
+                return True
+            elif uuid != None and user['uuid'] == uuid:
+                return True
         return False
 
     def clear(self):

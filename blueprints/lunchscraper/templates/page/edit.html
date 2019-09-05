@@ -7,19 +7,43 @@
     {% if not data['user'] %}
       <p>Sorry, we could not identify you.</p>
     {% else %}
-		<h3>Preferences for {{ data['user']['email'] }}</h3>
+		<h5>Manage preferences for {{ data['user']['email'] }}</h5>
     <form action="" method="post" class="col-md-6 text-left" style="margin: auto;" class="preferences">
-			{% for r in data['restaurants'] %}
-        <div>
-          <input type="checkbox" name="preferences" value="{{ r.id }}" {{ r.checked }}>
-          <label>{{ r.name }}</label>
-        </div>
-			{% endfor %}
-      <input type="hidden" name="token" value="{{ data['user']['token'] }}" >
-      <div class="text-center">
-          <input type="submit" name="update" class="btn btn-success" value="Update">
-          <input type="submit" name="forget" class="btn btn-danger" value="Forget Me :'(">
-      </div>
+			<div class="form-group row">
+				<legend class="col-form-label col-sm-4 pt-0">Restaurants</legend>
+				<div class="col-sm-8 col-form-label">
+					{% for r in data['restaurants'] %}
+				 	<div class="form-check">
+		        <input type="checkbox" class="form-check-input" name="preferences" value="{{ r.id }}" id="pref_{{ r.id }}" {{ r.checked }}>
+		        <label class="form-check-label" for="pref_{{ r.id }}">{{ r.name }}</label>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+			<div class="form-group row">
+				<legend class="col-form-label col-sm-4 pt-0">Language</legend>
+				<div class="col-sm-8 col-form-label">
+					<div class="form-check">
+						<input type="radio" class="form-check-input" name="language" id="lang_{{ data['user']['language'] }}" value="original" {{ 'checked' if data['user']['language'] == 'original' }}>
+						<label for="lang_{{ data['user']['language'] }}">Original</label>
+					</div>
+				 	<div class="form-check">
+						<input type="radio" class="form-check-input" name="language" id="lang_{{ data['user']['language'] }}" value="cs" {{ 'checked' if data['user']['language'] == 'cs' }}>
+						<label for="lang_{{ data['user']['language'] }}">Czech</label>
+					</div>
+				 	<div class="form-check">
+						<input type="radio" class="form-check-input" name="language" id="lang_{{ data['user']['language'] }}" value="en" {{ 'checked' if data['user']['language'] == 'en' }}>
+						<label for="lang_{{ data['user']['language'] }}">English</label>
+					</div>
+				</div>
+			</div>
+			<div class="form-group row">
+	      <input type="hidden" name="token" value="{{ data['user']['token'] }}" >
+	      <div class="text-center" style="margin:auto;">
+	          <input type="submit" name="update" class="btn btn-success" value="Update">
+	          <input type="submit" name="forget" class="btn btn-danger" value="Forget Me :'(">
+	      </div>
+			</div>
     </form>
     {% endif %}
 </div>
