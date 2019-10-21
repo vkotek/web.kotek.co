@@ -4,9 +4,10 @@ from flask import (
     render_template,
     request,
     url_for,
-    flash)
+    flash,
+    jsonify)
 
-from plugins import db
+# from plugins import db
 from plugins.login_manager import login_required
 from blueprints.lunchscraper import controller
 
@@ -22,7 +23,7 @@ def index():
 
         user = {'email': request.form['email']}
 
-        if db.User().add(email=user['email']):
+        if controller.User().add(email=user['email']):
             flash('Thank you, activate your subscription by verifying your email.')
         else:
             flash('Seems like this email is already subscribed!')
@@ -35,12 +36,12 @@ def edit():
     if request.method == 'GET':
 
         token = request.args.get('token')
-        user = db.User().get(token=token)
+        user = controller.User().get(token=token)
 
         if user:
             data = {}
             data['user'] = user
-            data['restaurants'] = db.Restaurants().restaurants
+            data['restaurants'] = controller.Restaurants().restaurants
             for restaurant in data['restaurants']:
                 if str(restaurant['id']) in data['user']['preferences']:
                     restaurant['checked'] = 'checked'
@@ -58,15 +59,14 @@ def edit():
 
         if 'forget' in data:
             # Script to remove user.
-            uuid = db.User().get(token=token)['uuid']
-            db.User().remove(uuid)
-            flash("Hi.. wait, who is this?")
+            uuid = controller.User().get(token=token)['uuid']
+            controller.User().remove(uuid)
             return redirect(url_for('lunchscraper.forgotten'))
 
         new_preferences = [pref[0] for pref in data.getlist('preferences')]
 
 
-        user = db.User()
+        user = controller.User()
         # Update preferences
         update_preferences = user.update_preferences(token, new_preferences)
         # Update language
@@ -85,8 +85,8 @@ def edit():
 def verify():
     if request.method == 'GET':
         token = request.args.get('token')
-        if db.User().verify(token):
-            user = db.User().get(token=token)
+        if controller.User().verify(token):
+            user = controller.User().get(token=token)
             flash("The email '{}' has been successfully verified!".format(user['email']))
             text = "Thank you!"
         else:
@@ -101,16 +101,38 @@ def verify():
 @login_required
 def admin():
 
-    users = db.User().users
+    users = controller.User().users
 
     data = {}
 
     data['general'] = {'users_count': len(users)}
-    data['restaurants'] = db.Restaurants().restaurants
+    data['restaurants'] = controller.Restaurants().restaurants
     data['users'] = users
     data['notices'] = controller.Email.get_notices()
 
     return render_template('page/admin.html', data=data)
+
+@lunchScraper.route("/admin/notices", methods=['GET','POST'])
+@login_required
+def admin_notices():
+
+    if request.method == "POST":
+        data = request.form
+        result = controller.Email.add_notice(data)
+        flash(result)
+        return redirect(url_for('lunchscraper.admin'))
+    else:
+        notices = controller.Email.get_notices()
+        return jsonify(notices)
+
+# return render_template('page/admin.html', data=data)
+
+@lunchScraper.route("/menu")
+def menu():
+
+    data = controller.Menu.get()
+
+    return render_template('page/menu.html', data=data)
 
 @lunchScraper.route("/forgotten")
 def forgotten():

@@ -1,7 +1,5 @@
 {% set navigation_bar = [
     ('/lunch-scraper', 'lunchscraper', 'Lunch Scraper'),
-    ('/projects', 'projects', 'Projects'),
-    ('/scrabble', 'scrabble', 'Scrabble'),
 ] -%}
 {% set active_page = active_page|default('index') -%}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -19,6 +17,7 @@
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 <script src="https://kit.fontawesome.com/26c3f25653.js"></script>
 <script src="{{ url_for('static', filename='js/canvasjs.min.js') }}"></script>
+{% block css %}{% endblock %}
 </head>
 <body>
 <div id="header" class="container">

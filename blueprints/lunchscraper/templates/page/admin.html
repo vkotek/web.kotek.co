@@ -1,4 +1,23 @@
 {% extends "layout.html" %}
+{% block css %}
+<style>
+	h3:before {
+	    margin-top: 4px;
+	    content: "";
+	    width: 100%;
+	    height: 1px;
+	    background: #e9ecef;
+	    display: block;
+	    margin: 20px auto;
+	}
+
+	button {
+	    float: right;
+	    margin: 10px;
+	    width: 80px;
+	}
+</style>
+{% endblock %}
 {% block body %}
 <div id="page" class="container" style="background-color: white;">
 	<div class="title">
@@ -23,17 +42,17 @@
           </td>
       </tr>
       {% endfor %}
-      <tr style="display: none;">
-        <td>
-            <form>
-            <input class="form-control" type="text" placeholder="YYYY-MM-DD" style="width: 100%;"></input>
-        </td>
-        <td>
-            <b><input class="form-control" type="text" placeholder="Title" style="width: 100%;"></input></b>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-        <button type="submit">Save</button>
-      </form>
-        </td>
+      <tr style="display: ;">
+				<form method="post" action="{{ url_for('lunchscraper.admin_notices') }}">
+	        <td>
+            <input name="date" class="form-control" type="text" placeholder="YYYY-MM-DD" style="width: 100%;"></input>
+	        </td>
+	        <td>
+            <b><input name="title" class="form-control" type="text" placeholder="Title" style="width: 100%;"></input></b>
+            <textarea name="text" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+        		<button type="submit">Save</button>
+	        </td>
+      	</form>
       </tr>
     </tbody>
   </table>
