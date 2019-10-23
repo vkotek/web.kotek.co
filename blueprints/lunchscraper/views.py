@@ -63,8 +63,7 @@ def edit():
             controller.User().remove(uuid)
             return redirect(url_for('lunchscraper.forgotten'))
 
-        new_preferences = [pref[0] for pref in data.getlist('preferences')]
-
+        new_preferences = data.getlist('preferences')
 
         user = controller.User()
         # Update preferences

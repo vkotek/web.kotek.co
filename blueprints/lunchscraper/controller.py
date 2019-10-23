@@ -65,6 +65,9 @@ class User(object):
         return new_user
 
     def get(self, uuid=None, email=None, token=None):
+        """Returns all users if no params provided,
+        otherwise provides user info for single user."""
+
         if not uuid and not email and not token:
             return self.users
         for user in self.users:
@@ -82,6 +85,10 @@ class User(object):
         return True
 
     def update_preferences(self, token, new_preferences):
+        """Updates the preferences for a given user with a new set"""
+        print("UPDATING PREFERENCES WITH TOKEN {}".format(token))
+        print(new_preferences)
+
         uuid = self.get(token=token)['uuid']
         for i, user in enumerate(self.users):
             if user['uuid'] == uuid:
@@ -128,6 +135,8 @@ class User(object):
         return Email().send_html(data)
 
     def update(self, uuid, option, value):
+        """Generic function to update any parameter of a user with given value"""
+
         for i, user in enumerate(self.users):
             if user['uuid'] == uuid:
                 self.users[i][option] = value
@@ -155,6 +164,7 @@ class User(object):
 
     def exists(self, email=None, uuid=None):
         """Check whether the given user exists."""
+
         self.reload()
         for user in self.users:
             if user['email'] == email or user['uuid'] == uuid:
@@ -163,12 +173,14 @@ class User(object):
 
     def clear(self):
         """Deletes all subscribers from the database."""
+
         with open(self.subscribers_file, 'w') as f:
             f.write("")
         self.reload()
 
     def salt(self=None, length=16):
         """Creates random salt of len 16 for user. Not yet implemented."""
+
         ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         chars = []
         for char in range(length):
@@ -176,6 +188,8 @@ class User(object):
         return "".join(chars)
 
     def add_restaurant_to_preferences(self, restaurant_id):
+        """Takes the provided restaurant ID and adds it to all subscribers"""
+
         self.reload()
         for recipient in self.users:
             if str(restaurant_id) not in str(recipient['preferences']):

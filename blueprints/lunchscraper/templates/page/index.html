@@ -4,23 +4,16 @@
 	<div class="title">
 		<h2>Lunch Scraper Subscription Center</h2>
 	</div>
-    {% if not user%}
-			<form action="" method="post" class="col-md-6 offset-md-3">
-				<input type="text" class="form-control form-control-lg" aria-label="Large" name="email"
-				 placeholder="Your email.." aria-describedby="inputGroup-sizing-sm">
-				 <p></p>
-				<input class="btn btn-primary mb-2" type="submit" value="Subscribe">
-			</form>
-    {% else %}
-			Preferences for {{ user['email'] }}
-			<ul>
-			{% for item in user['preferences'] %}
-				<li>{{item}}</li>
-			{% endfor %}
-			</ul>
-			This feature is under development.
-    {% endif %}
+		<form action="" method="post" class="col-md-6 offset-md-3">
+			<input type="text" class="form-control form-control-lg" aria-label="Large" name="email"
+			 placeholder="Your email.." aria-describedby="inputGroup-sizing-sm">
+			 <p></p>
+			<input class="btn btn-primary mb-2" type="submit" value="Subscribe">
+		</form>
 		<br>
 		<p>Check out today's <a href="{{ url_for( 'lunchscraper.menu' ) }}">menu</a></p>
+		{% if session.username %}
+		<p><a href="{{ url_for('lunchscraper.admin') }}"><i class="fas fa-tools"></i> Administration</a></p>
+		{% endif %}
 </div>
 {% endblock %}

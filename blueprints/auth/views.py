@@ -15,12 +15,6 @@ import hashlib, csv
 
 auth = Blueprint('auth', __name__, template_folder='templates', url_prefix='/auth')
 
-@auth.route("/")
-@login_required
-def index():
-    data = ["Hello"]
-    return render_template('index.html')
-
 @auth.route("/login", methods=['GET','POST'])
 def login():
     if request.method == 'POST':
@@ -36,7 +30,7 @@ def login():
                         session['username'] = request.form['username']
                         if request.args.get('next'):
                             return redirect(request.args.get('next'))
-                        return redirect(url_for('auth.index'))
+                        return redirect(url_for('page.home'))
         except:
             flash("Invalid username or password")
             return redirect(url_for('auth.login'))
@@ -55,7 +49,7 @@ def register():
             users = csv.writer(users, delimiter=',', quotechar='"')
             users.writerow([user, pw_hashed])
         flash('User created.')
-        return redirect(url_for('auth.index'))
+        return redirect(url_for('page.home'))
 
     elif request.method == 'GET':
         return render_template('register.html')

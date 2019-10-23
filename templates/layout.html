@@ -43,9 +43,13 @@
 {% endwith %}
 {% block body %}{% endblock %}
 <div id="copyright" class="container">
-
 	<p><a href="https://www.youtube.com/watch?v=0Puv0Pss33M"><i class="fas fa-external-link-alt"></i> Welcome to the Antrhopocene.</a></p>
 	<p><a href="https://www.youtube.com/watch?v=sacc_x-XB1Y"><i class="fas fa-external-link-alt"></i> Three Seconds.</a></p>
+  {% if not session.username %}
+    <p><a href="{{ url_for('auth.login') }}"><i class="fas fa-sign-in-alt"></i> login</a></p>
+  {% else %}
+    <p><a href="{{ url_for('auth.logout') }}"><i class="fas fa-sign-out-alt"></i> logout</a></p>
+  {% endif %}
 </div>
 </body>
 </html>
