@@ -43,16 +43,16 @@
       </tr>
       {% endfor %}
       <tr style="display: ;">
-				<form method="post" action="{{ url_for('lunchscraper.admin_notices') }}">
+          <form method="post" action="{{ url_for('lunchscraper.admin_notices') }}">
 	        <td>
             <input name="date" class="form-control" type="text" placeholder="YYYY-MM-DD" style="width: 100%;"></input>
 	        </td>
 	        <td>
             <b><input name="title" class="form-control" type="text" placeholder="Title" style="width: 100%;"></input></b>
             <textarea name="text" class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-        		<button type="submit">Save</button>
+        	<button type="submit">Save</button>
 	        </td>
-      	</form>
+          </form>
       </tr>
     </tbody>
   </table>
@@ -81,7 +81,7 @@
     <thead>
       <tr>
         <th>Email</th>
-        <th>Preferences</th>
+        <th>Prefs</th>
         <th>Registered</th>
         <th>Verified</th>
         <th>Edit</th>
@@ -90,11 +90,15 @@
     <tbody>
       {% for u in data['users'] %}
       <tr>
-        <td>{{ u.email }}</td>
-        <td>{{ u.preferences }}</td>
+        <td style="text-align:left;">{{ u.email }}</td>
+        <td>{{ u.preferences | length }}</td>
         <td>{{ pretty_datetime(u.registered) }}</td>
-        <td>{{ pretty_datetime(u.verified) }}</td>
-        <td><a href="/lunch-scraper/edit?token={{ u.token }}">EDIT</a></td>
+        <td>{% if u.verified %}
+            <span style="color: green; font-weight: bold;">✓</span>
+            {% else %}
+            <span style="color: red; font-weight: bold;">✘</span>
+            {% endif %}</td>
+        <td><a href="/lunch-scraper/edit?token={{ u.token }}"><i class="fas fa-user-cog"></i></a></td>
       </tr>
       {% endfor %}
     </tbody>

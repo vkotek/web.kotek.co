@@ -28,6 +28,7 @@ def create_app():
     from blueprints.lunchscraper import lunchScraper
     from blueprints.projects import projects
     from blueprints.scrabble import scrabble
+    from blueprints.puzzle import puzzle
     from blueprints.api import api
     from blueprints.auth import auth
     from blueprints.page import page
@@ -42,6 +43,7 @@ def create_app():
     app.register_blueprint(lunchScraper)
     app.register_blueprint(projects)
     app.register_blueprint(scrabble)
+    app.register_blueprint(puzzle)
     app.register_blueprint(api)
     app.register_blueprint(auth)
     app.register_blueprint(page)

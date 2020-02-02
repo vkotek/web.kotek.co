@@ -47,7 +47,7 @@ class User(object):
             'registered': datetime.now().isoformat(),
             'preferences': Restaurants().preferences(),
             'salt': salt,
-            'language': None,
+            'language': 'original',
         }
 
         self.users.append(new_user)
@@ -207,6 +207,10 @@ class Restaurants(object):
         return self.restaurants
 
     def get(self, id=None):
+        try:
+            id = int(id)
+        except:
+            raise Exception("Incorrect id format, must be int or mutable to int.")
         if isinstance(id, int):
             for restaurant in self.restaurants:
                 if restaurant['id'] == id:

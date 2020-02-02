@@ -1,38 +1,78 @@
 {% extends "layout.html" %}
+
+{% block head %}
+<style>   
+    
+    .connectedSortable {
+        min-height: 10em;
+    }
+    
+    .connectedSortable li {
+        border-left: 4px solid gray;
+        padding-left: 0.3em;
+    }
+    
+    .connectedSortable input {
+        display: none;
+    }
+    
+    #preferencesActive {
+        border-left: 3px solid green;
+    }
+    
+    #preferencesInactive {
+        border-left: 3px solid red;
+    }
+</style>
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    $( function() {
+        $( "#preferencesActive, #preferencesInactive" ).sortable({
+            connectWith: ".connectedSortable"
+        }).disableSelection();
+    } );
+</script>
+{% endblock %}
+
 {% block body %}
 <div id="page" class="container" style="background-color: white;">
-	<div class="title">
+	<div class="title" hidden>
 		<h2>Lunch Scraper Subscription Center</h2>
 	</div>
     {% if not data['user'] %}
       <p>Sorry, we could not identify you.</p>
     {% else %}
 		<h5>Manage preferences for {{ data['user']['email'] }}</h5>
-    <form action="" method="post" class="col-md-6 text-left" style="margin: auto;" class="preferences">
+    <form action="" method="post" class="col-md-6 text-left" style="margin: auto;" class="preferences" id="preferencesForm">
 			<div class="form-group row">
-				<legend class="col-form-label col-sm-4 pt-0">Restaurants</legend>
-				<div class="col-sm-8 col-form-label">
-					{% for r in data['restaurants'] %}
-				 	<div class="form-check">
-		        <input type="checkbox" class="form-check-input" name="preferences" value="{{ r.id }}" id="pref_{{ r.id }}" {{ r.checked }}>
-		        <label class="form-check-label" for="pref_{{ r.id }}">{{ r.name }}</label>
-					</div>
+				<legend class="col-form-label col-12 pt-0">Restaurants
+                <p style="font-size: 0.5em; color: gray;">Order or disable your preferences by dragging them around! It does not work on mobile for now, sorry!</p>
+                </legend>
+				<ul class="col-6 col-form-label connectedSortable" id="preferencesActive">
+					{% for r in data['active'] %}
+                    <li class="form-check"><input type="checkbox" name="preferences" value="{{ r.id }}" id="pref_{{ r.id }}" />{{ r.name }}</li>
 					{% endfor %}
-				</div>
+				</ul>
+				<ul class="col-6 col-form-label connectedSortable" id="preferencesInactive">
+					{% for r in data['inactive'] %}
+				 	<li class="form-check"><input type="checkbox" name="preferences" value="{{ r.id }}" id="pref_{{ r.id }}" />{{ r.name }}</li>
+					{% endfor %}
+				</ul>
 			</div>
 			<div class="form-group row">
-				<legend class="col-form-label col-sm-4 pt-0">Language</legend>
-				<div class="col-sm-8 col-form-label">
+				<legend class="col-form-label col-12 pt-0">Language</legend>
+				<div class="col-12 col-form-label">
 					<div class="form-check">
-						<input type="radio" class="form-check-input" name="language" id="lang_{{ data['user']['language'] }}" value="original" {{ 'checked' if data['user']['language'] == 'original' }}>
+						<input type="radio" class="form-check-input" name="language" value="original" {{ 'checked' if data['user']['language'] == 'original' }}>
 						<label for="lang_{{ data['user']['language'] }}">Original</label>
 					</div>
 				 	<div class="form-check">
-						<input type="radio" class="form-check-input" name="language" id="lang_{{ data['user']['language'] }}" value="cs" {{ 'checked' if data['user']['language'] == 'cs' }}>
+						<input type="radio" class="form-check-input" name="language" value="cs" {{ 'checked' if data['user']['language'] == 'cs' }}>
 						<label for="lang_{{ data['user']['language'] }}">Czech</label>
 					</div>
 				 	<div class="form-check">
-						<input type="radio" class="form-check-input" name="language" id="lang_{{ data['user']['language'] }}" value="en" {{ 'checked' if data['user']['language'] == 'en' }}>
+						<input type="radio" class="form-check-input" name="language" value="en" {{ 'checked' if data['user']['language'] == 'en' }}>
 						<label for="lang_{{ data['user']['language'] }}">English</label>
 					</div>
 				</div>
@@ -47,4 +87,13 @@
     </form>
     {% endif %}
 </div>
+{% endblock %}
+{% block footer %}
+<script>
+    // Check/uncheck preferences depending on sorting column on submit
+    document.getElementById('preferencesForm').addEventListener('submit', function(evt){
+        document.querySelectorAll('#preferencesActive input').forEach( (x) => { x.checked = true; } )
+        document.querySelectorAll('#preferencesInactive input').forEach( (x) => { x.checked = false; } )
+    })
+</script>
 {% endblock %}

@@ -39,12 +39,14 @@ def edit():
         user = controller.User().get(token=token)
 
         if user:
+            
             data = {}
             data['user'] = user
-            data['restaurants'] = controller.Restaurants().restaurants
-            for restaurant in data['restaurants']:
-                if str(restaurant['id']) in data['user']['preferences']:
-                    restaurant['checked'] = 'checked'
+            
+            restaurants = controller.Restaurants()
+            data['active'] = [ restaurants.get(pref) for pref in data['user']['preferences'] ]
+            data['inactive'] = [ r for r in restaurants.restaurants if str(r['id']) not in data['user']['preferences'] ]     
+            
             data['language'] = user['language']
         else:
             data = None
