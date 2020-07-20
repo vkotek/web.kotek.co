@@ -1,15 +1,6 @@
 var sounds = {
-  "smash" : {
-    url : "/static/sounds/smash.mp3",
-  },
-  "ping" : {
-    url : "/static/sounds/ping.mp3"
-  },
-  "bump" : {
-    url : "/static/sounds/bump.mp3"
-  },
-  "coin" : {
-    url : "/static/sounds/coin.mp3"
+  "anotherone" : {
+    url : "/static/sounds/anotherone.mp3"
   }
 };
 

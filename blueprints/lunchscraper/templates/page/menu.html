@@ -1,4 +1,20 @@
 {% extends "layout.html" %}
+
+{% block head %}
+{% if data.is_compact %}
+<style>
+    container, #page {
+        max-width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    #header, .title, #copyright {
+        display: none;
+    }
+</style>
+{% endif %}
+{% endblock %}
+
 {% block body %}
 <div id="page" class="container" style="background-color: white;">
 	<div class="title">
@@ -12,8 +28,12 @@
       <tr>
         <th>#</th>
         <th>Restaurant</th>
-        <th>Czech</th>
-        <th>English</th>
+          {% if not data.force_language or data.force_language == 'cs' %}
+            <th>Czech</th>
+          {% endif %}
+          {% if not data.force_language or data.force_language == 'en' %}
+            <th>English</th>
+          {% endif %}
       </tr>
     </thead>
     <tbody>
@@ -21,20 +41,24 @@
       <tr>
         <td>{{ r.id }}</td>
         <td><a href="{{ r.url }}">{{ r.name }}</a></td>
-        <td>
-          <ul style="list-style:square; text-align: left; margin-left: 1em;">
-          {% for item in r.menu_cs %}
-            <li>{{ item }}</li>
-          {% endfor %}
-          </ul>
-        </td>
-        <td>
-          <ul style="list-style:square; text-align: left; margin-left: 1em;">
-          {% for item in r.menu_en %}
-            <li>{{ item }}</li>
-          {% endfor %}
-          </ul>
-        </td>
+          {% if not data.force_language or data.force_language == 'cs' %}
+            <td>
+              <ul style="list-style:square; text-align: left; margin-left: 1em;">
+              {% for item in r.menu_cs %}
+                <li>{{ item }}</li>
+              {% endfor %}
+              </ul>
+            </td>
+          {% endif %}
+          {% if not data.force_language or data.force_language == 'en' %}
+            <td>
+              <ul style="list-style:square; text-align: left; margin-left: 1em;">
+              {% for item in r.menu_en %}
+                <li>{{ item }}</li>
+              {% endfor %}
+              </ul>
+            </td>
+          {% endif %}
       </tr>
       {% endfor %}
     </tbody>

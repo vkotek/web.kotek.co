@@ -130,8 +130,36 @@ def admin_notices():
 
 @lunchScraper.route("/menu")
 def menu():
-
+    
     data = controller.Menu.get()
+    
+    try:
+        data['is_compact'] = request.args.get('compact')
+        data['force_language'] = request.args.get('language')
+        
+        
+        restaurants = [ str(x) for x in request.args.get('id').split(',') ]
+        # Filter for restaurnats
+        data['menus'] = [r for r in data['menus'] if str(r['id']) in restaurants]
+        
+        # Sort menus
+        menus_sorted = []
+        for r in restaurants:
+            print(r)
+            try:
+                foo = [x for x in data['menus'] if str(x['id']) == str(r)][0]
+                menus_sorted.append(foo)
+                print("Success", r)
+            except:
+                print("restaurnt not found. ID: ", r)
+            
+        data['menus'] = menus_sorted
+        
+        print(menus_sorted)
+                     
+    except Exception as e:
+        print(e)
+    
 
     return render_template('page/menu.html', data=data)
 

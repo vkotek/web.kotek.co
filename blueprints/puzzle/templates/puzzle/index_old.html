@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+{% set active_page = "scrabble" %}
+{% block head %}
+<style>
+.addButton {
+    width: 50%;
+    max-width: 200px;
+    height: 5em;
+}
+</style>
+<script src="{{ url_for('static', filename='js/sounds.js') }}" type="text/javascript"></script>
+{% endblock %}
+{% block body %}
+<div id="page" class="container" style="background-color: white;">
+	<div class="title">
+		<h2>Puzzle</h2>
+        <p><span class="byline">Progess Tracker.</span></p>
+        <div class="progress" style="width:80%; margin: auto;">
+          <div class="progress-bar-success progress-bar-striped" role="progressbar" aria-valuenow="{{ data.pieces / 9000 * 100 }}"
+          aria-valuemin="0" aria-valuemax="100" style="width:{{ data.pieces / 9000 * 100 }}%; background-color: #77a7ff;">
+            {{  '{0:0.2f}'.format(data.pieces / 9000 * 100)  }}%
+          </div>
+        </div>
+	</div>
+    <p>{{ data.pieces }} pieces connected.</p>
+    <p>{{ data.last_session }} in last/current session.</p>
+  <hr>
+  <form action="" method="post">
+   {% if data.status == 'END' %}
+    <button class="btn-sm" name="actiontype" type="submit" value="STA">
+        START
+    </button>
+   {% else %}
+    <button class="btn-lg addButton" name="actiontype" type="submit" value="ADD" onclick="playSound('coin');">
+        ADD
+    </button>
+    <hr>
+    <p>Current session started at {{ data.time_pretty }}</p>
+    <button class="btn-sm" name="actiontype" type="submit" value="END">
+        END
+    </button>
+   {% endif %}
+  </form>
+  <hr>
+  <div>
+      <b>Time spent:</b><br>
+      {{ data['total_seconds']['days'] }} days,
+      {{ data['total_seconds']['hours'] }} hours, and 
+      {{ data['total_seconds']['minutes'] }} minutes.<br>
+      <b>Avg. time per piece:</b><br>{{ data['time_per_piece'] }} seconds.<br>
+      <b>Estimated time to completed:</b><br>
+      {{ data['time_remaining']['days'] }} days,
+      {{ data['time_remaining']['hours'] }} hours, and 
+      {{ data['time_remaining']['minutes'] }} minutes.<br>
+  </div>
+</div>
+{% endblock %}

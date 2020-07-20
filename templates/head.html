@@ -13,6 +13,7 @@
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 <script src="https://kit.fontawesome.com/26c3f25653.js"></script>
 <script src="{{ url_for('static', filename='js/canvasjs.min.js') }}"></script>
+    {% block head %}{% endblock %}
 </head>
 <body>
 {% with messages = get_flashed_messages() %}

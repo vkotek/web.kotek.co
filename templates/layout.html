@@ -5,21 +5,22 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 <head>
-    
+
 <title>KOTEK.CO</title>
-    
+
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 <meta name="keywords" content="" />
 <meta name="description" content="" />
-    
+
 <link href="https://fonts.googleapis.com/css?family=News+Cycle:400,700" rel="stylesheet" />
 <link rel="stylesheet" href="{{ url_for('static', filename='default.css') }}" type="text/css" media="all" />
 <link rel="stylesheet" href="{{ url_for('static', filename='fonts.css') }}" type="text/css" media="all" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
 <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}" type="text/css" media="all" />
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    
+
 <script src="https://kit.fontawesome.com/26c3f25653.js"></script>
 <script src="{{ url_for('static', filename='js/canvasjs.min.js') }}"></script>
 
@@ -34,7 +35,7 @@
 </script>
 
 {% block head %}{% endblock %}
-    
+
 </head>
 <body>
 <div id="header" class="container">
@@ -49,7 +50,7 @@
 		</ul>
 	</div>
 </div>
-    
+
 {% with messages = get_flashed_messages() %}
   {% if messages %}
     <ul class="flashes container">
@@ -59,12 +60,12 @@
     </ul>
   {% endif %}
 {% endwith %}
-    
+
 {% block body %}{% endblock %}
 
 
 <div id="copyright" class="container">
-{% block footer %} 
+{% block footer %}
 	<p><a href="https://www.youtube.com/watch?v=0Puv0Pss33M"><i class="fas fa-external-link-alt"></i> Welcome to the Antrhopocene.</a></p>
 	<p><a href="https://www.youtube.com/watch?v=sacc_x-XB1Y"><i class="fas fa-external-link-alt"></i> Three Seconds.</a></p>
   {% if not session.username %}
