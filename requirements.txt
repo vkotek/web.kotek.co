@@ -7,7 +7,7 @@ Flask==1.0
 Flask-Menu==0.7.0
 idna==2.8
 itsdangerous==0.24
-Jinja2==2.10.1
+Jinja2==2.11.3
 LUNCHSCRAPER==1.4.0
 MarkupSafe==1.0
 matplotlib==2.1.1
