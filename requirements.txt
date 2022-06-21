@@ -11,7 +11,7 @@ Jinja2==2.10.1
 LUNCHSCRAPER==1.4.0
 MarkupSafe==1.0
 matplotlib==2.1.1
-numpy==1.13.3
+numpy==1.22.0
 pandas==0.21.0
 pyparsing==2.2.0
 python-dateutil==2.6.1
